@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#FF5722</color>
+    <color name="gray">#757575</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="icon_background">#E3F2FD</color>
+    <color name="icon_tint">#1976D2</color>
+    
+    <!-- Freshness status colors -->
+    <color name="fresh">#27AE60</color>
+    <color name="expired">#EB5757</color>
+    <color name="soon_expire">#F2994A</color>
+    <color name="not_fresh">#A5A5A5</color>
+
+    <!-- Colors for result screen -->
+    <color name="color_fresh">#2E7D32</color> <!-- Dark Green -->
+    <color name="color_normal">#F2994A</color> <!-- Orange -->
+    <color name="color_spoiled">#D32F2F</color> <!-- Red -->
+</resources>

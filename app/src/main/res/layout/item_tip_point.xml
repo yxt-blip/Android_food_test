@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="8dp">
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/circle_background" />
+
+    <TextView
+        android:id="@+id/tipPointText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="深绿色蔬菜含有丰富的叶酸和维生素K，对心脏健康和骨骼健康很重要。"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</LinearLayout> 
