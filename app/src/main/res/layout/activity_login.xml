@@ -44,7 +44,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_phone"
-                    android:tint="#00D26A"/>
+                    app:tint="#00D26A"/>
 
                 <EditText
                     android:id="@+id/et_phone"
@@ -77,28 +77,20 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_code"
-                    android:tint="#00D26A"/>
+                    app:tint="#00D26A"/>
 
                 <EditText
                     android:id="@+id/et_code"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="请输入验证码"
+                    android:hint="请输入密码"
                     android:background="@null"
                     android:textSize="16sp"
                     android:textColorHint="#999999"
                     android:paddingStart="12dp"
                     android:inputType="number"/>
 
-                <TextView
-                    android:id="@+id/btn_get_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="获取验证码"
-                    android:textColor="#00D26A"
-                    android:textSize="14sp"
-                    android:padding="8dp"/>
             </LinearLayout>
 
             <View

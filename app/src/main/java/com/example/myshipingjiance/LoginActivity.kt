@@ -2,12 +2,15 @@ package com.example.myshipingjiance
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.myshipingjiance.api.RetrofitClient
 import com.example.myshipingjiance.api.TokenManager
 import com.example.myshipingjiance.databinding.ActivityLoginBinding
+import com.example.myshipingjiance.db.User
+import com.example.myshipingjiance.db.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val apiService by lazy { RetrofitClient.getInstance(this) }
     private val tokenManager by lazy { TokenManager(this) }
+    private val userDao by lazy { UserDao(this.applicationContext) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,17 +31,23 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupListeners()
+        setPhoneAndPassword()
+    }
+
+    private fun setPhoneAndPassword() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val user = userDao.getCurrentUser()
+            Log.d("LoginActivity", "User from DB: $user")
+            withContext(Dispatchers.Main){
+                user?.let {
+                    binding.etPhone.setText(it.phone)
+                    binding.etCode.setText(it.password)
+                }
+            }
+        }
     }
 
     private fun setupListeners() {
-        binding.btnGetCode.setOnClickListener {
-            val phone = binding.etPhone.text.toString()
-            if (validatePhone(phone)) {
-                // TODO: 调用获取验证码API
-                Toast.makeText(this, "验证码已发送", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         binding.btnLogin.setOnClickListener {
             val phone = binding.etPhone.text.toString()
             val code = binding.etCode.text.toString()
@@ -64,6 +75,13 @@ class LoginActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     if (response.code == 200 && response.data != null) {
+                        val user = User(id = 1, phone = phone, password = code)
+
+                        // 在后台线程执行数据库操作
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            userDao.saveOrUpdateUser(user) // <--- 调用新方法
+                        }
+
                         tokenManager.saveToken(response.data.token)
                         Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
@@ -98,13 +116,18 @@ class LoginActivity : AppCompatActivity() {
             return false
         }
         if (code.isEmpty()) {
-            binding.etCode.error = "请输入验证码"
+            binding.etCode.error = "请输入密码"
             return false
         }
-        if (!code.matches(Regex("""^\d{4,6}$"""))) {
-            binding.etCode.error = "请输入正确的验证码"
+        //This is a simple validation, you might want to adjust it
+        if (code.length < 4) {
+            binding.etCode.error = "密码长度不能小于4位"
             return false
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

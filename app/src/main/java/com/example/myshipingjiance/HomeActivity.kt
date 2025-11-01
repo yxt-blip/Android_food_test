@@ -1,74 +1,53 @@
 package com.example.myshipingjiance
 
-import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.core.view.get
+import androidx.viewpager2.widget.ViewPager2
+import com.example.myshipingjiance.adapter.MainViewPagerAdapter
 import com.example.myshipingjiance.databinding.ActivityHomeBinding
-import android.content.Context
-import java.io.File
-import java.io.FileOutputStream
-
-fun assetFilePath(context: Context, assetName: String): String {
-    val file = File(context.filesDir, assetName)
-    if (file.exists() && file.length() > 0) {
-        return file.absolutePath
-    }
-    context.assets.open(assetName).use { inputStream ->
-        FileOutputStream(file).use { outputStream ->
-            val buffer = ByteArray(4 * 1024)
-            var read: Int
-            while (inputStream.read(buffer).also { read = it } != -1) {
-                outputStream.write(buffer, 0, read)
-            }
-            outputStream.flush()
-        }
-    }
-    return file.absolutePath
-}
 
 class HomeActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 设置导航控制器
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+        // 1. 设置 ViewPager2 的适配器
+        binding.mainViewPager.adapter = MainViewPagerAdapter(this)
 
-        // 设置底部导航
-        binding.bottomNav.setupWithNavController(navController)
+        // 2. 设置滑动页面时，底部导航栏也跟着切换
+        binding.mainViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.bottomNav.menu[position].isChecked = true
+            }
+        })
 
-        // 设置顶级导航目的地
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_history,
-                R.id.navigation_profile
-            )
-        )
-        
-        // 设置 ActionBar
+        // 3. 设置点击底部导航栏时，ViewPager2也切换到对应页面
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    binding.mainViewPager.currentItem = 1
+                    true
+                }
+                R.id.navigation_history -> {
+                    binding.mainViewPager.currentItem = 0
+                    true
+                }
+                R.id.navigation_profile -> {
+                    binding.mainViewPager.currentItem = 2
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 4. 设置 Toolbar
         setSupportActionBar(binding.toolbar)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        supportActionBar?.title = "首页"
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-} 
+}

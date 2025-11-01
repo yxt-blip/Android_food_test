@@ -16,6 +16,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_USERNAME = "username"
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_AVATAR_PATH = "avatar_path"
+        const val COLUMN_PASSWORD = "password"
+        const val COLUMN_PHONE = "phone"
+
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -25,7 +28,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COLUMN_USERNAME TEXT NOT NULL,
                 $COLUMN_DESCRIPTION TEXT,
-                $COLUMN_AVATAR_PATH TEXT
+                $COLUMN_AVATAR_PATH TEXT,
+                $COLUMN_PASSWORD TEXT,
+                $COLUMN_PHONE TEXT
+               
             )
         """.trimIndent()
         

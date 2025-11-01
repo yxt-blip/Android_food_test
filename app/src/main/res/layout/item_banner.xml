@@ -5,10 +5,10 @@
 
     <ImageView
         android:id="@+id/bannerImage"
-        android:layout_width="240dp"
+        android:layout_width="244dp"
         android:layout_height="160dp"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:contentDescription="轮播图片" />
+        android:contentDescription="轮播图片"
+        android:scaleType="centerCrop" />
 
 </FrameLayout> 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My shipingjiance</string>
+    <string name="base_url_dev">http://192.168.1.5:8080/api/v1/</string>
 </resources>
